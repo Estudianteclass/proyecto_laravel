@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Task extends Model
 {
     use SoftDeletes;
@@ -16,14 +16,23 @@ class Task extends Model
         'description',
         'user_id'
     ];
-
     /**
-     * Get the user that owns the Task
+     * The user that belong to the Task
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * The user that belong to the Task
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function sharedWith(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'task_user')->withPivot('permission');
     }
 }

@@ -58,7 +58,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
-    public function roles(): BelongsToMany{
-        return $this->belongsToMany(Role::class, 'role_user_table','user_d','role_id');
+
+    /**
+     * The sharedTasks that belong to the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function sharedTasks(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class, 'task_user')->withPivot('permission');
     }
 }
